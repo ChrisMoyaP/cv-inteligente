@@ -1,12 +1,15 @@
 import OpenAI from "openai"
 import { NextResponse } from "next/server"
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
-})
-
 export async function POST(req: Request) {
     try {
+        if (!process.env.OPENAI_API_KEY) {
+            return NextResponse.json(
+                { error: "OPENAI_API_KEY no configurada" },
+                { status: 500 }
+            )
+        }
+
         const { resumen } = await req.json()
 
         if (!resumen) {
@@ -16,7 +19,10 @@ export async function POST(req: Request) {
             )
         }
 
-        console.log("API KEY EXISTS:", !!process.env.OPENAI_API_KEY)
+        // Instanciar aquí, no arriba
+        const openai = new OpenAI({
+            apiKey: process.env.OPENAI_API_KEY
+        })
 
         const completion = await openai.chat.completions.create({
             model: "gpt-4o-mini",
@@ -33,7 +39,7 @@ export async function POST(req: Request) {
             ]
         })
 
-        const improved = completion.choices[0].message.content
+        const improved = completion.choices[0]?.message?.content ?? ""
 
         return NextResponse.json({ improved })
 
