@@ -3,7 +3,8 @@ import {
     Page,
     Text,
     View,
-    StyleSheet
+    StyleSheet,
+    Link
 } from "@react-pdf/renderer"
 import { CV } from "@/types/cv"
 
@@ -107,8 +108,11 @@ function formatDate(fecha: string) {
 
 export default function CVDocument({ cv }: Props) {
     const experienciasOrdenadas = [...cv.experiencias].sort((a, b) =>
-        new Date(b.fechaInicio).getTime() -
-        new Date(a.fechaInicio).getTime()
+        new Date(b.fechaInicio).getTime() - new Date(a.fechaInicio).getTime()
+    )
+
+    const educacionOrdenada = [...cv.educacion].sort((a, b) =>
+        new Date(b.fechaInicio).getTime() - new Date(a.fechaInicio).getTime()
     )
 
     return (
@@ -122,6 +126,8 @@ export default function CVDocument({ cv }: Props) {
 
                     <Text style={styles.textMuted}>{cv.email}</Text>
                     <Text style={styles.textMuted}>{cv.telefono}</Text>
+                    {cv.ubicacion ? <Text style={styles.textMuted}>{cv.ubicacion}</Text> : null}
+                    {cv.linkedin ? <Link src={cv.linkedin} style={styles.textMuted}>{cv.linkedin}</Link> : null}
 
                     {cv.resumen && (
                         <>
@@ -191,7 +197,7 @@ export default function CVDocument({ cv }: Props) {
                             </View>
 
                             <View wrap>
-                                {cv.educacion.map((edu, index) => (
+                                {educacionOrdenada.map((edu, index) => (
                                     <View
                                         key={index}
                                         style={styles.educacionBlock}
@@ -203,7 +209,7 @@ export default function CVDocument({ cv }: Props) {
                                             </Text>
                                             <Text style={styles.textMuted}>
                                                 {formatDate(edu.fechaInicio)} -{" "}
-                                                {formatDate(edu.fechaFin)}
+                                                {edu.actual ? "En curso" : formatDate(edu.fechaFin)}
                                             </Text>
                                         </View>
                                     </View>

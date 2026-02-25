@@ -9,7 +9,7 @@ interface Props {
     handleEducacionChange: (
         index: number,
         field: string,
-        value: string
+        value: string | boolean
     ) => void
     errors: Record<string, string>
 }
@@ -45,13 +45,10 @@ export default function EstudiosForm({
                             onChange={(e) =>
                                 handleEducacionChange(index, "institucion", e.target.value)
                             }
-                            className={`w-full border p-2 rounded ${institucionError ? "border-red-500" : ""
-                                }`}
+                            className={`w-full border p-2 rounded ${institucionError ? "border-red-500" : ""}`}
                         />
                         {institucionError && (
-                            <p className="text-red-600 text-sm">
-                                {institucionError}
-                            </p>
+                            <p className="text-red-600 text-sm">{institucionError}</p>
                         )}
 
                         <input
@@ -61,13 +58,10 @@ export default function EstudiosForm({
                             onChange={(e) =>
                                 handleEducacionChange(index, "titulo", e.target.value)
                             }
-                            className={`w-full border p-2 rounded ${tituloError ? "border-red-500" : ""
-                                }`}
+                            className={`w-full border p-2 rounded ${tituloError ? "border-red-500" : ""}`}
                         />
                         {tituloError && (
-                            <p className="text-red-600 text-sm">
-                                {tituloError}
-                            </p>
+                            <p className="text-red-600 text-sm">{tituloError}</p>
                         )}
 
                         <div className="flex gap-4">
@@ -81,13 +75,10 @@ export default function EstudiosForm({
                                     onChange={(e) =>
                                         handleEducacionChange(index, "fechaInicio", e.target.value)
                                     }
-                                    className={`border p-2 rounded ${fechaInicioError ? "border-red-500" : ""
-                                        }`}
+                                    className={`border p-2 rounded ${fechaInicioError ? "border-red-500" : ""}`}
                                 />
                                 {fechaInicioError && (
-                                    <p className="text-red-600 text-sm">
-                                        {fechaInicioError}
-                                    </p>
+                                    <p className="text-red-600 text-sm">{fechaInicioError}</p>
                                 )}
                             </div>
 
@@ -97,18 +88,27 @@ export default function EstudiosForm({
                                 </label>
                                 <input
                                     type="date"
+                                    disabled={edu.actual}
                                     value={edu.fechaFin}
                                     onChange={(e) =>
                                         handleEducacionChange(index, "fechaFin", e.target.value)
                                     }
-                                    className={`border p-2 rounded ${fechaFinError ? "border-red-500" : ""
-                                        }`}
+                                    className={`border p-2 rounded ${fechaFinError ? "border-red-500" : ""} ${edu.actual ? "bg-gray-100" : ""}`}
                                 />
                                 {fechaFinError && (
-                                    <p className="text-red-600 text-sm">
-                                        {fechaFinError}
-                                    </p>
+                                    <p className="text-red-600 text-sm">{fechaFinError}</p>
                                 )}
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    checked={edu.actual}
+                                    onChange={(e) =>
+                                        handleEducacionChange(index, "actual", e.target.checked)
+                                    }
+                                />
+                                <label className="text-sm">En progreso</label>
                             </div>
                         </div>
 
@@ -132,4 +132,4 @@ export default function EstudiosForm({
             </button>
         </div>
     )
-}   
+}

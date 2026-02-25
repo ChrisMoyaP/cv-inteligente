@@ -12,12 +12,15 @@ export interface Educacion {
   titulo: string;
   fechaInicio: string;
   fechaFin: string;
+  actual: boolean;
 }
 
 export interface CV {
   nombre: string;
   email: string;
   telefono: string;
+  ubicacion: string;
+  linkedin: string;
   resumen: string;
   experiencias: Experiencia[];
   educacion: Educacion[];

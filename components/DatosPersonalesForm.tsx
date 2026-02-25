@@ -9,6 +9,8 @@ interface Props {
   ) => void
   errors: Record<string, string>
   onMejorarResumen: () => void
+  isMejorandoResumen: boolean
+  mejorarResumenError: string | null
 }
 
 export default function DatosPersonalesForm({
@@ -16,6 +18,8 @@ export default function DatosPersonalesForm({
   handleChange,
   errors,
   onMejorarResumen,
+  isMejorandoResumen,
+  mejorarResumenError,
 }: Props) {
   return (
     <div className="space-y-4">
@@ -64,6 +68,37 @@ export default function DatosPersonalesForm({
       </div>
 
       <div className="flex flex-col">
+        <label className="text-sm font-medium mb-1">
+          Ubicación <span className="text-gray-400 font-normal">(opcional)</span>
+        </label>
+        <input
+          type="text"
+          name="ubicacion"
+          value={cv.ubicacion}
+          onChange={handleChange}
+          placeholder="Ej: Santiago, Chile"
+          className="w-full border p-3 rounded-xl"
+        />
+      </div>
+
+      <div className="flex flex-col">
+        <label className="text-sm font-medium mb-1">
+          LinkedIn / Portfolio <span className="text-gray-400 font-normal">(opcional)</span>
+        </label>
+        <input
+          type="url"
+          name="linkedin"
+          value={cv.linkedin}
+          onChange={handleChange}
+          placeholder="Ej: https://linkedin.com/in/tu-perfil"
+          className={`w-full border p-3 rounded-xl ${errors.linkedin ? "border-red-500" : ""}`}
+        />
+        {errors.linkedin && (
+          <p className="text-red-600 text-sm mt-1">{errors.linkedin}</p>
+        )}
+      </div>
+
+      <div className="flex flex-col">
         <label className="text-sm font-medium mb-1">Resumen profesional</label>
         <textarea
           name="resumen"
@@ -75,10 +110,21 @@ export default function DatosPersonalesForm({
         <button
           type="button"
           onClick={onMejorarResumen}
-          className="mt-2 text-sm bg-blue-600 text-white px-3 py-1 rounded"
+          disabled={isMejorandoResumen || !cv.resumen}
+          className="mt-2 text-sm bg-blue-600 text-white px-3 py-1 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
-          Mejorar con IA
+          {isMejorandoResumen ? (
+            <>
+              <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              Mejorando...
+            </>
+          ) : (
+            "Mejorar con IA"
+          )}
         </button>
+        {mejorarResumenError && (
+          <p className="text-red-600 text-sm mt-1">{mejorarResumenError}</p>
+        )}
         {errors.resumen && (
           <p className="text-red-600 text-sm mt-1">{errors.resumen}</p>
         )}

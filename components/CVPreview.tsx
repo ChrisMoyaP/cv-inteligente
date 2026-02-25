@@ -6,32 +6,39 @@ interface Props {
     cv: CV
 }
 
-
-
 export default function CvPreview({ cv }: Props) {
 
-    const experienciasOrdenadas = [...cv.experiencias].sort((a, b) => {
-        const fechaA = new Date(a.fechaInicio).getTime()
-        const fechaB = new Date(b.fechaInicio).getTime()
-        return fechaB - fechaA
-    })
+    const experienciasOrdenadas = [...cv.experiencias].sort((a, b) =>
+        new Date(b.fechaInicio).getTime() - new Date(a.fechaInicio).getTime()
+    )
+
+    const educacionOrdenada = [...cv.educacion].sort((a, b) =>
+        new Date(b.fechaInicio).getTime() - new Date(a.fechaInicio).getTime()
+    )
 
     function calcularAniosTotales(experiencias: typeof cv.experiencias) {
-        let totalMeses = 0
+        // Merge de intervalos para no contar solapamientos doble
+        const intervalos = experiencias
+            .filter((exp) => exp.fechaInicio)
+            .map((exp) => ({
+                inicio: new Date(exp.fechaInicio).getTime(),
+                fin: (exp.actual ? new Date() : new Date(exp.fechaFin)).getTime(),
+            }))
+            .filter((i) => i.fin > i.inicio)
+            .sort((a, b) => a.inicio - b.inicio)
 
-        experiencias.forEach((exp) => {
-            if (!exp.fechaInicio) return
+        const merged: { inicio: number; fin: number }[] = []
+        for (const intervalo of intervalos) {
+            const ultimo = merged[merged.length - 1]
+            if (ultimo && intervalo.inicio <= ultimo.fin) {
+                ultimo.fin = Math.max(ultimo.fin, intervalo.fin)
+            } else {
+                merged.push({ ...intervalo })
+            }
+        }
 
-            const inicio = new Date(exp.fechaInicio)
-            const fin = exp.actual ? new Date() : new Date(exp.fechaFin)
-
-            const diffMeses =
-                (fin.getFullYear() - inicio.getFullYear()) * 12 +
-                (fin.getMonth() - inicio.getMonth())
-
-            if (diffMeses > 0) totalMeses += diffMeses
-        })
-
+        const totalMs = merged.reduce((acc, i) => acc + (i.fin - i.inicio), 0)
+        const totalMeses = Math.floor(totalMs / (1000 * 60 * 60 * 24 * 30.44))
         const anios = Math.floor(totalMeses / 12)
         const meses = totalMeses % 12
 
@@ -55,6 +62,17 @@ export default function CvPreview({ cv }: Props) {
                 <h1 className="text-3xl font-bold">{cv.nombre}</h1>
                 <p>{cv.email}</p>
                 <p>{cv.telefono}</p>
+                {cv.ubicacion && <p>{cv.ubicacion}</p>}
+                {cv.linkedin && (
+                    <a
+                        href={cv.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline text-sm"
+                    >
+                        {cv.linkedin}
+                    </a>
+                )}
             </div>
 
             <div>
@@ -85,13 +103,14 @@ export default function CvPreview({ cv }: Props) {
 
             <div>
                 <h2 className="text-xl font-semibold mb-2">Educación</h2>
-                {cv.educacion.map((edu, index) => (
+                {educacionOrdenada.map((edu, index) => (
                     <div key={index} className="mb-4">
                         <h3 className="font-semibold">
                             {edu.titulo} - {edu.institucion}
                         </h3>
                         <p className="text-sm text-gray-600">
-                            {edu.fechaInicio} - {edu.fechaFin}
+                            {formatearFecha(edu.fechaInicio)} -{" "}
+                            {edu.actual ? "En curso" : formatearFecha(edu.fechaFin)}
                         </p>
                     </div>
                 ))}
