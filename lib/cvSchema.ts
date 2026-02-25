@@ -67,32 +67,4 @@ export const cvSchema = z.object({
   experiencias: z.array(experienciaSchema),
   educacion: z.array(educacionSchema),
   habilidades: z.array(z.string())
-}).superRefine((data, ctx) => {
-
-  const experiencias = data.experiencias
-
-  for (let i = 0; i < experiencias.length; i++) {
-    for (let j = i + 1; j < experiencias.length; j++) {
-
-      const a = experiencias[i]
-      const b = experiencias[j]
-
-      const inicioA = new Date(a.fechaInicio)
-      const finA = a.actual ? new Date() : new Date(a.fechaFin)
-
-      const inicioB = new Date(b.fechaInicio)
-      const finB = b.actual ? new Date() : new Date(b.fechaFin)
-
-      const overlap =
-        inicioA <= finB && inicioB <= finA
-
-      if (overlap) {
-        ctx.addIssue({
-          path: ["experiencias", j, "fechaInicio"],
-          message: "Esta experiencia se superpone con otra",
-          code: "custom"
-        })
-      }
-    }
-  }
 })
