@@ -99,11 +99,10 @@ interface Props {
 
 function formatDate(fecha: string) {
     if (!fecha) return ""
-    const date = new Date(fecha)
-    return date.toLocaleDateString("es-CL", {
-        year: "numeric",
-        month: "short"
-    })
+    if (/^\d{4}$/.test(fecha)) return fecha
+    const [year, month] = fecha.split("-").map(Number)
+    const date = new Date(year, month - 1, 1)
+    return date.toLocaleDateString("es-CL", { year: "numeric", month: "short" })
 }
 
 export default function CVDocument({ cv }: Props) {

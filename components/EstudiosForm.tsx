@@ -14,6 +14,15 @@ interface Props {
     errors: Record<string, string>
 }
 
+const currentYear = new Date().getFullYear();
+const years = Array.from(
+  { length: currentYear - 1950 + 1 },
+  (_, i) => currentYear - i
+);
+
+const inputClass = "w-full border p-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+const selectClass = "border p-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+
 export default function EstudiosForm({
     educacion,
     agregarEducacion,
@@ -23,7 +32,7 @@ export default function EstudiosForm({
 }: Props) {
     return (
         <div>
-            <h2 className="text-lg font-semibold mt-6 mb-2">
+            <h2 className="text-lg font-semibold mt-6 mb-2 dark:text-white">
                 Educación
             </h2>
 
@@ -36,7 +45,7 @@ export default function EstudiosForm({
                 return (
                     <div
                         key={index}
-                        className="border p-4 rounded-xl mb-4 space-y-2"
+                        className="border dark:border-gray-700 p-4 rounded-xl mb-4 space-y-2"
                     >
                         <input
                             type="text"
@@ -45,7 +54,7 @@ export default function EstudiosForm({
                             onChange={(e) =>
                                 handleEducacionChange(index, "institucion", e.target.value)
                             }
-                            className={`w-full border p-2 rounded ${institucionError ? "border-red-500" : ""}`}
+                            className={`${inputClass} ${institucionError ? "border-red-500" : ""}`}
                         />
                         {institucionError && (
                             <p className="text-red-600 text-sm">{institucionError}</p>
@@ -58,7 +67,7 @@ export default function EstudiosForm({
                             onChange={(e) =>
                                 handleEducacionChange(index, "titulo", e.target.value)
                             }
-                            className={`w-full border p-2 rounded ${tituloError ? "border-red-500" : ""}`}
+                            className={`${inputClass} ${tituloError ? "border-red-500" : ""}`}
                         />
                         {tituloError && (
                             <p className="text-red-600 text-sm">{tituloError}</p>
@@ -66,35 +75,46 @@ export default function EstudiosForm({
 
                         <div className="flex gap-4">
                             <div className="flex flex-col w-full">
-                                <label className="text-sm font-medium mb-1">
+                                <label className="text-sm font-medium mb-1 dark:text-gray-300">
                                     Fecha de inicio
                                 </label>
-                                <input
-                                    type="date"
+                                <select
                                     value={edu.fechaInicio}
                                     onChange={(e) =>
                                         handleEducacionChange(index, "fechaInicio", e.target.value)
                                     }
-                                    className={`border p-2 rounded ${fechaInicioError ? "border-red-500" : ""}`}
-                                />
+                                    className={`${selectClass} ${fechaInicioError ? "border-red-500" : ""}`}
+                                >
+                                    <option value="">Seleccionar año</option>
+                                    {years.map((year) => (
+                                        <option key={year} value={year}>
+                                            {year}
+                                        </option>
+                                    ))}
+                                </select>
                                 {fechaInicioError && (
                                     <p className="text-red-600 text-sm">{fechaInicioError}</p>
                                 )}
                             </div>
 
                             <div className="flex flex-col w-full">
-                                <label className="text-sm font-medium mb-1">
+                                <label className="text-sm font-medium mb-1 dark:text-gray-300">
                                     Fecha de término
                                 </label>
-                                <input
-                                    type="date"
-                                    disabled={edu.actual}
+                                <select
                                     value={edu.fechaFin}
                                     onChange={(e) =>
                                         handleEducacionChange(index, "fechaFin", e.target.value)
                                     }
-                                    className={`border p-2 rounded ${fechaFinError ? "border-red-500" : ""} ${edu.actual ? "bg-gray-100" : ""}`}
-                                />
+                                    className={`${selectClass} ${fechaFinError ? "border-red-500" : ""}`}
+                                >
+                                    <option value="">Seleccionar año</option>
+                                    {years.map((year) => (
+                                        <option key={year} value={year}>
+                                            {year}
+                                        </option>
+                                    ))}
+                                </select>
                                 {fechaFinError && (
                                     <p className="text-red-600 text-sm">{fechaFinError}</p>
                                 )}
@@ -108,7 +128,7 @@ export default function EstudiosForm({
                                         handleEducacionChange(index, "actual", e.target.checked)
                                     }
                                 />
-                                <label className="text-sm">En progreso</label>
+                                <label className="text-sm dark:text-gray-300">En progreso</label>
                             </div>
                         </div>
 
@@ -126,7 +146,7 @@ export default function EstudiosForm({
             <button
                 type="button"
                 onClick={agregarEducacion}
-                className="bg-gray-800 text-white px-4 py-2 rounded-lg"
+                className="bg-gray-800 dark:bg-gray-600 text-white px-4 py-2 rounded-lg"
             >
                 + Agregar Estudio
             </button>

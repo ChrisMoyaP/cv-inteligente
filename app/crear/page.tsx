@@ -7,6 +7,7 @@ import DatosPersonalesForm from "@/components/DatosPersonalesForm"
 import EstudiosForm from "@/components/EstudiosForm"
 import HabilidadesForm from "@/components/HabilidadesForm"
 import { useRouter } from "next/navigation"
+import ThemeToggle from "@/components/ThemeToggle"
 
 const initialCv: CV = {
   nombre: "",
@@ -233,17 +234,20 @@ export default function CrearCV() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-100 py-10 px-4">
-      <div className="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow">
+    <main className="min-h-screen bg-gray-100 dark:bg-gray-900 py-10 px-4">
+      <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-2xl shadow">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">Crear Currículum</h1>
-          {autoGuardado && (
-            <span className="text-xs text-gray-400">Guardado automáticamente</span>
-          )}
+          <h1 className="text-2xl font-bold dark:text-white">Crear Currículum</h1>
+          <div className="flex items-center gap-3">
+            {autoGuardado && (
+              <span className="text-xs text-gray-400 dark:text-gray-500">Guardado automáticamente</span>
+            )}
+            <ThemeToggle />
+          </div>
         </div>
 
         {errors.general && (
-          <p className="mb-4 text-red-600 text-sm bg-red-50 p-3 rounded-xl">
+          <p className="mb-4 text-red-600 text-sm bg-red-50 dark:bg-red-900/20 p-3 rounded-xl">
             {errors.general}
           </p>
         )}
@@ -275,7 +279,7 @@ export default function CrearCV() {
           />
 
           {cv.experiencias.length === 0 && cv.educacion.length === 0 && (
-            <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm px-4 py-3 rounded-xl">
+            <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700/50 text-yellow-800 dark:text-yellow-300 text-sm px-4 py-3 rounded-xl">
               💡 <strong>Recomendación:</strong> Tu CV no tiene experiencia laboral ni estudios. Agregar al menos uno de los dos hará tu perfil más completo. No es obligatorio para continuar.
             </div>
           )}
@@ -289,11 +293,11 @@ export default function CrearCV() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full py-3 rounded-xl transition text-white ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-black hover:opacity-80"}`}
+            className={`w-full py-3 rounded-xl transition text-white dark:text-black ${isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-black dark:bg-white hover:opacity-80"}`}
           >
             {isSubmitting ? (
               <span className="flex items-center justify-center gap-2">
-                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                <span className="w-4 h-4 border-2 border-white dark:border-gray-800 border-t-transparent rounded-full animate-spin"></span>
                 Validando...
               </span>
             ) : (

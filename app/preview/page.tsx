@@ -5,6 +5,7 @@ import dynamic from "next/dynamic"
 import { CV } from "@/types/cv"
 import Link from "next/link"
 import { PDFDownloadLink } from "@react-pdf/renderer"
+import ThemeToggle from "@/components/ThemeToggle"
 import CVDocument from "@/components/pdf/CVDocument"
 import CVModerno from "@/components/pdf/CVModerno"
 import CVElegante from "@/components/pdf/CVElegante"
@@ -196,9 +197,9 @@ export default function PreviewPage() {
 
     if (!cv) {
         return (
-            <main className="min-h-screen flex items-center justify-center">
+            <main className="min-h-screen flex items-center justify-center dark:bg-gray-900">
                 <div className="text-center">
-                    <p className="mb-4">No hay CV guardado.</p>
+                    <p className="mb-4 dark:text-gray-300">No hay CV guardado.</p>
                     <Link href="/crear" className="text-blue-600 underline">
                         Crear uno ahora
                     </Link>
@@ -217,13 +218,13 @@ export default function PreviewPage() {
     const plantillaActual = PLANTILLAS.find(p => p.id === plantilla)!
 
     return (
-        <main className="min-h-screen bg-gray-100 py-8 px-4">
+        <main className="min-h-screen bg-gray-100 dark:bg-gray-900 py-8 px-4">
             <div className="max-w-4xl mx-auto space-y-4">
 
                 {/* Barra superior de navegación */}
                 <div className="flex items-center justify-between">
                     <div className="flex gap-5 text-sm">
-                        <Link href="/" className="text-gray-500 hover:underline">
+                        <Link href="/" className="text-gray-500 dark:text-gray-400 hover:underline">
                             ← Inicio
                         </Link>
                         <Link href="/crear" className="text-blue-600 hover:underline">
@@ -231,44 +232,47 @@ export default function PreviewPage() {
                         </Link>
                     </div>
 
-                    <PDFDownloadLink
-                        document={documentoSeleccionado}
-                        fileName={`CV-${plantilla}.pdf`}
-                    >
-                        {({ loading }) => (
-                            <button
-                                className="bg-black text-white text-sm px-5 py-2 rounded-lg hover:opacity-80 transition flex items-center gap-2"
-                                disabled={loading}
-                            >
-                                {loading ? (
-                                    <>
-                                        <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-                                        </svg>
-                                        Generando…
-                                    </>
-                                ) : (
-                                    <>
-                                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
-                                        </svg>
-                                        Descargar — {plantillaActual.nombre}
-                                    </>
-                                )}
-                            </button>
-                        )}
-                    </PDFDownloadLink>
+                    <div className="flex items-center gap-3">
+                        <ThemeToggle />
+                        <PDFDownloadLink
+                            document={documentoSeleccionado}
+                            fileName={`CV-${plantilla}.pdf`}
+                        >
+                            {({ loading }) => (
+                                <button
+                                    className="bg-black dark:bg-white text-white dark:text-black text-sm px-5 py-2 rounded-lg hover:opacity-80 transition flex items-center gap-2"
+                                    disabled={loading}
+                                >
+                                    {loading ? (
+                                        <>
+                                            <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                                            </svg>
+                                            Generando…
+                                        </>
+                                    ) : (
+                                        <>
+                                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+                                            </svg>
+                                            Descargar — {plantillaActual.nombre}
+                                        </>
+                                    )}
+                                </button>
+                            )}
+                        </PDFDownloadLink>
+                    </div>
                 </div>
 
                 {/* Panel principal */}
-                <div className="bg-white rounded-2xl shadow overflow-hidden">
+                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow overflow-hidden">
 
                     {/* Selector de plantillas */}
-                    <div className="p-5 border-b border-gray-100">
-                        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
-                            Plantilla seleccionada: <span className="text-gray-800">{plantillaActual.nombre}</span>
-                            <span className="ml-2 font-normal normal-case text-gray-400">— {plantillaActual.descripcion}</span>
+                    <div className="p-5 border-b border-gray-100 dark:border-gray-700">
+                        <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+                            Plantilla seleccionada: <span className="text-gray-800 dark:text-gray-200">{plantillaActual.nombre}</span>
+                            <span className="ml-2 font-normal normal-case text-gray-400 dark:text-gray-500">— {plantillaActual.descripcion}</span>
                         </p>
                         <div className="grid grid-cols-5 gap-2">
                             {PLANTILLAS.map((p) => {
@@ -278,8 +282,8 @@ export default function PreviewPage() {
                                         key={p.id}
                                         className={`cursor-pointer rounded-lg border-2 overflow-hidden transition ${
                                             seleccionada
-                                                ? "border-black shadow"
-                                                : "border-gray-200 hover:border-gray-400"
+                                                ? "border-black dark:border-white shadow"
+                                                : "border-gray-200 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-400"
                                         }`}
                                     >
                                         <input
@@ -290,14 +294,16 @@ export default function PreviewPage() {
                                             onChange={() => setPlantilla(p.id)}
                                             className="sr-only"
                                         />
-                                        {/* Miniatura */}
-                                        <div className="h-20 bg-white overflow-hidden border-b border-gray-100">
+                                        {/* Miniatura — siempre fondo blanco para que la preview sea fiel al PDF */}
+                                        <div className="h-20 bg-white overflow-hidden border-b border-gray-100 dark:border-gray-600">
                                             {p.preview}
                                         </div>
                                         {/* Pie */}
                                         <div
                                             className={`px-2 py-1.5 flex items-center justify-between text-xs transition ${
-                                                seleccionada ? "bg-black text-white" : "bg-gray-50 text-gray-600"
+                                                seleccionada
+                                                    ? "bg-black text-white"
+                                                    : "bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
                                             }`}
                                         >
                                             <span className="font-medium truncate">{p.nombre}</span>
@@ -315,7 +321,7 @@ export default function PreviewPage() {
 
                     {/* Previsualización PDF en tiempo real */}
                     {/* key={plantilla} fuerza re-montaje al cambiar plantilla → PDF se regenera */}
-                    <div className="bg-gray-50 [&>iframe]:border-0" style={{ height: "780px" }}>
+                    <div className="bg-gray-50 dark:bg-gray-700 [&>iframe]:border-0" style={{ height: "780px" }}>
                         <PDFViewer
                             key={plantilla}
                             width="100%"

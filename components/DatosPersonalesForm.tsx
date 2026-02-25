@@ -13,6 +13,8 @@ interface Props {
   mejorarResumenError: string | null
 }
 
+const inputClass = "w-full border p-3 rounded-xl dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+
 export default function DatosPersonalesForm({
   cv,
   handleChange,
@@ -23,16 +25,16 @@ export default function DatosPersonalesForm({
 }: Props) {
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold mb-2">Datos Personales</h2>
+      <h2 className="text-lg font-semibold mb-2 dark:text-white">Datos Personales</h2>
 
       <div className="flex flex-col">
-        <label className="text-sm font-medium mb-1">Nombre completo</label>
+        <label className="text-sm font-medium mb-1 dark:text-gray-300">Nombre completo</label>
         <input
           type="text"
           name="nombre"
           value={cv.nombre}
           onChange={handleChange}
-          className="w-full border p-3 rounded-xl"
+          className={inputClass}
         />
         {errors.nombre && (
           <p className="text-red-600 text-sm mt-1">{errors.nombre}</p>
@@ -40,13 +42,13 @@ export default function DatosPersonalesForm({
       </div>
 
       <div className="flex flex-col">
-        <label className="text-sm font-medium mb-1">Email</label>
+        <label className="text-sm font-medium mb-1 dark:text-gray-300">Email</label>
         <input
           type="email"
           name="email"
           value={cv.email}
           onChange={handleChange}
-          className="w-full border p-3 rounded-xl"
+          className={inputClass}
         />
         {errors.email && (
           <p className="text-red-600 text-sm mt-1">{errors.email}</p>
@@ -54,13 +56,13 @@ export default function DatosPersonalesForm({
       </div>
 
       <div className="flex flex-col">
-        <label className="text-sm font-medium mb-1">Teléfono</label>
+        <label className="text-sm font-medium mb-1 dark:text-gray-300">Teléfono</label>
         <input
           type="text"
           name="telefono"
           value={cv.telefono}
           onChange={handleChange}
-          className="w-full border p-3 rounded-xl"
+          className={inputClass}
         />
         {errors.telefono && (
           <p className="text-red-600 text-sm mt-1">{errors.telefono}</p>
@@ -68,8 +70,8 @@ export default function DatosPersonalesForm({
       </div>
 
       <div className="flex flex-col">
-        <label className="text-sm font-medium mb-1">
-          Ubicación <span className="text-gray-400 font-normal">(opcional)</span>
+        <label className="text-sm font-medium mb-1 dark:text-gray-300">
+          Ubicación <span className="text-gray-400 dark:text-gray-500 font-normal">(opcional)</span>
         </label>
         <input
           type="text"
@@ -77,13 +79,13 @@ export default function DatosPersonalesForm({
           value={cv.ubicacion}
           onChange={handleChange}
           placeholder="Ej: Santiago, Chile"
-          className="w-full border p-3 rounded-xl"
+          className={inputClass}
         />
       </div>
 
       <div className="flex flex-col">
-        <label className="text-sm font-medium mb-1">
-          LinkedIn / Portfolio <span className="text-gray-400 font-normal">(opcional)</span>
+        <label className="text-sm font-medium mb-1 dark:text-gray-300">
+          LinkedIn / Portfolio <span className="text-gray-400 dark:text-gray-500 font-normal">(opcional)</span>
         </label>
         <input
           type="url"
@@ -91,7 +93,7 @@ export default function DatosPersonalesForm({
           value={cv.linkedin}
           onChange={handleChange}
           placeholder="Ej: https://linkedin.com/in/tu-perfil"
-          className={`w-full border p-3 rounded-xl ${errors.linkedin ? "border-red-500" : ""}`}
+          className={`${inputClass} ${errors.linkedin ? "border-red-500" : ""}`}
         />
         {errors.linkedin && (
           <p className="text-red-600 text-sm mt-1">{errors.linkedin}</p>
@@ -99,13 +101,13 @@ export default function DatosPersonalesForm({
       </div>
 
       <div className="flex flex-col">
-        <label className="text-sm font-medium mb-1">Resumen profesional</label>
+        <label className="text-sm font-medium mb-1 dark:text-gray-300">Resumen profesional</label>
         <textarea
           name="resumen"
           value={cv.resumen}
           onChange={handleChange}
           rows={4}
-          className="w-full border p-3 rounded-xl"
+          className={inputClass}
         />
         <button
           type="button"

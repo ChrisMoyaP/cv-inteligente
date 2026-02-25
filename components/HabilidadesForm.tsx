@@ -37,7 +37,7 @@ export default function HabilidadesForm({
 
   return (
     <div>
-      <h2 className="text-lg font-semibold mt-6 mb-2 flex items-center gap-2">
+      <h2 className="text-lg font-semibold mt-6 mb-2 dark:text-white flex items-center gap-2">
         Habilidades
         <span className={`text-sm font-normal ${colorContador}`}>
           ({cantidad}/{MAX_HABILIDADES})
@@ -51,10 +51,10 @@ export default function HabilidadesForm({
         disabled={lleno}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
-        className={`w-full border p-3 rounded-xl mb-1 transition ${
+        className={`w-full border p-3 rounded-xl mb-1 transition dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${
           lleno
-            ? "bg-gray-50 text-gray-400 cursor-not-allowed border-gray-200"
-            : "border-gray-300"
+            ? "bg-gray-50 dark:bg-gray-800 text-gray-400 cursor-not-allowed border-gray-200"
+            : "border-gray-300 dark:bg-gray-700"
         }`}
       />
 
