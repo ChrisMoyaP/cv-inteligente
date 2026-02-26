@@ -113,7 +113,7 @@ export default function DatosPersonalesForm({
           type="button"
           onClick={onMejorarResumen}
           disabled={isMejorandoResumen || !cv.resumen}
-          className="mt-2 text-sm bg-blue-600 text-white px-3 py-1 rounded disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          className="mt-2 text-sm bg-blue-600 text-white px-3 py-1 rounded-full disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 mx-auto"
         >
           {isMejorandoResumen ? (
             <>

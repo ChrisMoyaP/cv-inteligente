@@ -11,6 +11,8 @@ import CVModerno from "@/components/pdf/CVModerno"
 import CVElegante from "@/components/pdf/CVElegante"
 import CVCreativo from "@/components/pdf/CVCreativo"
 import CVCompacto from "@/components/pdf/CVCompacto"
+import CVPreviewHTML from "@/components/CVPreviewHTML"
+import { useIsMobile } from "@/hooks/useIsMobile"
 
 // PDFViewer usa APIs del browser — importar solo en cliente
 const PDFViewer = dynamic(
@@ -187,6 +189,7 @@ const PLANTILLAS: PlantillaConfig[] = [
 export default function PreviewPage() {
     const [cv, setCv] = useState<CV | null>(null)
     const [plantilla, setPlantilla] = useState<Plantilla>("clasico")
+    const isMobile = useIsMobile()
 
     useEffect(() => {
         const storedCv = localStorage.getItem("cv-inteligente:v1")
@@ -319,16 +322,22 @@ export default function PreviewPage() {
                         </div>
                     </div>
 
-                    {/* Previsualización PDF en tiempo real */}
-                    {/* key={plantilla} fuerza re-montaje al cambiar plantilla → PDF se regenera */}
+                    {/* Previsualización: PDF en desktop, HTML en móvil */}
                     <div className="bg-gray-50 dark:bg-gray-700 [&>iframe]:border-0" style={{ height: "780px" }}>
-                        <PDFViewer
-                            key={plantilla}
-                            width="100%"
-                            height="780"
-                        >
-                            {documentoSeleccionado}
-                        </PDFViewer>
+                        {isMobile ? (
+                            <div className="h-full overflow-y-auto">
+                                <CVPreviewHTML cv={cv} plantilla={plantilla} />
+                            </div>
+                        ) : (
+                            /* key={plantilla} fuerza re-montaje al cambiar plantilla → PDF se regenera */
+                            <PDFViewer
+                                key={plantilla}
+                                width="100%"
+                                height="780"
+                            >
+                                {documentoSeleccionado}
+                            </PDFViewer>
+                        )}
                     </div>
 
                 </div>

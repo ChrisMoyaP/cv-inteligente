@@ -21,7 +21,7 @@ const years = Array.from(
 );
 
 const inputClass = "w-full border p-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
-const selectClass = "border p-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+const selectClass = "w-full border p-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
 
 export default function EstudiosForm({
     educacion,
@@ -73,7 +73,7 @@ export default function EstudiosForm({
                             <p className="text-red-600 text-sm">{tituloError}</p>
                         )}
 
-                        <div className="flex gap-4">
+                        <div className="flex flex-col sm:flex-row gap-4">
                             <div className="flex flex-col w-full">
                                 <label className="text-sm font-medium mb-1 dark:text-gray-300">
                                     Fecha de inicio

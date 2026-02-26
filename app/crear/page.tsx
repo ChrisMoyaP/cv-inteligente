@@ -310,7 +310,7 @@ export default function CrearCV() {
             onClick={resetCv}
             className="w-full mt-3 bg-red-600 text-white py-3 rounded-xl hover:opacity-80 transition"
           >
-            Nuevo CV
+            Limpiar Campos
           </button>
         </form>
       </div>
