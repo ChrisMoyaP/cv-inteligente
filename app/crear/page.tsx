@@ -17,12 +17,19 @@ export default function CrearCV() {
   useEffect(() => {
     const load = async () => {
       const storedUuid = localStorage.getItem("user_uuid")
+      console.log("[CV load] user_uuid en localStorage:", storedUuid)
 
       if (storedUuid) {
         try {
-          const res = await fetch(`/api/cv/${storedUuid}`)
+          const url = `/api/cv/${storedUuid}`
+          console.log("[CV load] GET", url)
+          const res = await fetch(url)
+          console.log("[CV load] status:", res.status)
+
           if (res.ok) {
-            const { data } = await res.json()
+            const json = await res.json()
+            console.log("[CV load] respuesta API:", json)
+            const { data } = json
             setInitialData({
               nombre: data.nombre ?? "",
               email: data.email ?? "",
@@ -35,13 +42,18 @@ export default function CrearCV() {
               educacion: (data.educacion ?? []).map((edu: any) => ({ actual: false, ...edu } as Educacion)),
               habilidades: data.habilidades ?? [],
             })
+            console.log("[CV load] CV cargado desde DB correctamente")
             return
+          } else {
+            const errJson = await res.json().catch(() => null)
+            console.warn("[CV load] API no-ok, cuerpo:", errJson)
           }
-        } catch {
-          // Fall through to localStorage
+        } catch (err) {
+          console.error("[CV load] error en fetch:", err)
         }
       }
 
+      console.log("[CV load] usando localStorage como fallback")
       const storedCv = localStorage.getItem("cv-inteligente:v1")
       if (storedCv) {
         const stored = JSON.parse(storedCv)
