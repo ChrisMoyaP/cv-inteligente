@@ -15,7 +15,7 @@ export const buildHabilidad = (value: string) => {
   const uniqueWords = [...new Set(words)]
 
   return {
-    limpia: normalized,
+    limpia: clean,
     palabras: uniqueWords,
     limitada: limitToTwoWords(uniqueWords),
   }
