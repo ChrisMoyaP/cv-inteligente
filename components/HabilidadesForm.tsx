@@ -1,6 +1,12 @@
 "use client"
-
 import { useState } from "react"
+
+import {
+  extractWords,
+  limitToTwoWords,
+  normalizeSeparators,
+  sanitize,
+} from "@/utils/habilidad"
 
 const MAX_HABILIDADES = 20
 
@@ -13,7 +19,7 @@ interface Props {
 export default function HabilidadesForm({
   habilidades,
   agregarHabilidad,
-  eliminarHabilidad
+  eliminarHabilidad,
 }: Props) {
   const [input, setInput] = useState("")
 
@@ -24,15 +30,42 @@ export default function HabilidadesForm({
     cantidad === MAX_HABILIDADES
       ? "text-red-500 font-semibold"
       : cantidad >= 15
-      ? "text-orange-400"
-      : "text-gray-400"
+        ? "text-orange-400"
+        : "text-gray-400"
+
+  const buildHabilidad = (value: string) => {
+    const clean = sanitize(value)
+    const words = extractWords(normalizeSeparators(clean))
+    const uniqueWords = [...new Set(words)]
+
+    return {
+      limpia: clean,
+      palabras: uniqueWords,
+      limitada: limitToTwoWords(uniqueWords),
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { limpia, palabras, limitada } = buildHabilidad(e.target.value)
+
+    if (palabras.length > 2 && !lleno) {
+      agregarHabilidad(limitada)
+      setInput("")
+      return
+    }
+
+    setInput(limpia)
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && input.trim() !== "" && !lleno) {
-      e.preventDefault()
-      agregarHabilidad(input.trim())
-      setInput("")
-    }
+    if (e.key !== "Enter" || lleno) return
+    e.preventDefault()
+
+    const { palabras, limitada } = buildHabilidad(input)
+    if (palabras.length === 0) return
+
+    agregarHabilidad(limitada)
+    setInput("")
   }
 
   return (
@@ -46,10 +79,12 @@ export default function HabilidadesForm({
 
       <input
         type="text"
-        placeholder={lleno ? "Límite alcanzado" : "Escribe una habilidad y presiona Enter"}
+        placeholder={
+          lleno ? "Límite alcanzado" : "Escribe una habilidad y presiona Enter"
+        }
         value={input}
         disabled={lleno}
-        onChange={(e) => setInput(e.target.value)}
+        onChange={handleChange}
         onKeyDown={handleKeyDown}
         className={`w-full border p-3 rounded-xl mb-1 transition dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${
           lleno
@@ -60,7 +95,8 @@ export default function HabilidadesForm({
 
       {lleno && (
         <p className="text-xs text-red-500 mb-3">
-          Alcanzaste el máximo de {MAX_HABILIDADES} habilidades. Elimina alguna para añadir otra.
+          Alcanzaste el máximo de {MAX_HABILIDADES} habilidades. Elimina alguna
+          para añadir otra.
         </p>
       )}
 
