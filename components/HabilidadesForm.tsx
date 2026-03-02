@@ -1,12 +1,7 @@
 "use client"
 import { useState } from "react"
 
-import {
-  extractWords,
-  limitToTwoWords,
-  normalizeSeparators,
-  sanitize,
-} from "@/utils/habilidad"
+import { buildHabilidad } from "@/utils/habilidad"
 
 const MAX_HABILIDADES = 20
 
@@ -32,18 +27,6 @@ export default function HabilidadesForm({
       : cantidad >= 15
         ? "text-orange-400"
         : "text-gray-400"
-
-  const buildHabilidad = (value: string) => {
-    const clean = sanitize(value)
-    const words = extractWords(normalizeSeparators(clean))
-    const uniqueWords = [...new Set(words)]
-
-    return {
-      limpia: clean,
-      palabras: uniqueWords,
-      limitada: limitToTwoWords(uniqueWords),
-    }
-  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { limpia, palabras, limitada } = buildHabilidad(e.target.value)
